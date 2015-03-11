@@ -1,4 +1,4 @@
-a = 120
+a = 67
 
 
 def add(number)
