@@ -10,10 +10,12 @@ puts "please enter you second number"
 number2 = gets.chomp.to_i
 
 if symbol == ("add")
-  puts "The awswer is #{number1 + number2}"
+  puts "The answer is #{number1 + number2}"
   elsif symbol == ("multiply")
-  puts "the awswer is #{number1 * number2}"
+  puts "the answer is #{number1 * number2}"
   elsif symbol == ("divide")
-  puts "The awnswer is #{number1 / number2}"
+  puts "The answer is #{number1 / number2}"
+  elsif symbol == "subtract"
+  puts "The answer is #{number1 - number2}"
 end
 
