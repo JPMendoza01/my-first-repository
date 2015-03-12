@@ -14,7 +14,7 @@ if symbol == ("add")
   elsif symbol == ("multiply")
   puts "the answer is #{number1 * number2}"
   elsif symbol == ("divide")
-  puts "The answer is #{number1 / number2}"
+  puts "The answer is #{number1.to_f / number2.to_f}"
   elsif symbol == "subtract"
   puts "The answer is #{number1 - number2}"
 end
