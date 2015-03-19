@@ -18,6 +18,13 @@ def empty_positions(board)
   board.select { |k , v| v == ' '}.keys
 end
 
+def two_in_a_row(hsh, mrkr)
+  if hsh.values.count(mrkr) == 2
+    hsh.select{|k,v| v == ' '}.keys.first
+  else
+    false
+  end
+end
 
 def player_picks_square(board)
   puts "Pick a square (1 - 9):"
