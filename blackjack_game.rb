@@ -15,18 +15,12 @@ def calculate_total(hand)
     end
   end
   
-  arr.select{|x| x == "A"}.count.times do
+  arr.select{|x| x == 'A'}.count.times do
     sum -= 10 if sum > 21
     end
-
-    sum
+  sum
 end  
 
-def check_for_winner(winner)
-   if winner == 21
-    puts "player wins!"
-  end
-end
 
 
 
@@ -41,66 +35,86 @@ deck.shuffle!
 player_cards = []
 dealer_cards = []
 
-player_cards << deck.pop
-dealer_cards << deck.pop
-player_cards << deck.pop
-dealer_cards << deck.pop
 
+player_cards << deck.pop
+dealer_cards << deck.pop
+player_cards << deck.pop
+dealer_cards << deck.pop
 
 puts "Player has: #{player_cards[0]} and #{player_cards[1]}"
-puts "Dealer has: #{dealer_cards[0]} and #{dealer_cards[1]}"
+puts "Dealer has the: #{dealer_cards[0]} and the other card is face down"
 
-player_total = calculate_total(player_cards)
-dealer_total = calculate_total(dealer_cards)
+  player_total = calculate_total(player_cards)
+  dealer_total = calculate_total(dealer_cards)
 
+puts "player has total of: #{player_total}"
 
-p "player has total of: #{player_total}"
-p "dealer has total of: #{dealer_total}"
-
-check_for_winner(player_total)
-
-
-
-puts "What do you want to do? hit y/n?"
-choice = gets.chomp
-
-if choice == 'y'
-     player_cards << deck.pop
-    player_total = calculate_total(player_cards)
-    p player_cards
-  puts player_total
+if player_total == 21
+  puts "player has hit black jack, player wins!"
+  exit
 end
 
 
+while player_total < 21
+  puts "Do you want to hit? y/n."
+  hit_or_stay = gets.chomp
+  
+  if !['y', 'n'].include?(hit_or_stay)
+    puts "You must enter y or n "
+    next
+  end
 
-puts "hit again? y/n"
-choice == gets.chomp
 
-if choice == 'y'
-     player_cards << deck.pop
-    player_total = calculate_total(player_cards)
-    p player_cards
-  puts player_total
-elsif choice == 'n'
+if hit_or_stay == 'n'
+  puts "you have chosen to stay"
   break
 end
+  
+  puts "player has chosen to hit"
+  player_cards << deck.pop
+  player_total = calculate_total(player_cards)
+  puts "Player got the: #{player_cards}"
+  puts "you now have #{player_total}"
+  
+  if player_total == 21
+    puts "you have Blackjack, player wins!"
+  end
+  
+  if player_total > 21
+    puts "player has busted"
+    puts "House wins!"
+    exit
+  end
+end
 
 
+while dealer_total < 17
+  puts "Dealer must hit if below 17"
+  dealer_cards << deck.pop
+  dealer_total = calculate_total(dealer_cards)
+  puts "Dealer has the: #{dealer_cards}"
+  puts "dealers new total is #{dealer_total}"
+  
+  if dealer_total > 21
+    puts "dealer has busted player wins!"
+    exit
+  end
+end
 
+if player_total > dealer_total
+  puts "player has #{player_total} and dealer has #{dealer_total}"
+  puts "player wins!"
+end
 
+if player_total == dealer_total
+  puts "player has #{player_total} and dealer has #{dealer_total}"
+  puts "Its a tie!"
+end
 
-
+if dealer_total > player_total
+  puts "player has #{player_total} and dealer has #{dealer_total}"
+  puts "House wins!"
+  exit
+end
 
   
-  
-  
-
-
-#show cards
-
-
-
-
-
-
-
