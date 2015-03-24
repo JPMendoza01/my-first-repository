@@ -1,5 +1,8 @@
   
 puts "Hello, welcome to Blackjack."
+sleep(2)
+puts "Dealing your cards"
+sleep(2)
 #need a deck
 def calculate_total(hand)
   arr = hand.map{ |x| x[0] }
@@ -67,16 +70,21 @@ while player_total < 21
 
 if hit_or_stay == 'n'
   puts "you have chosen to stay"
+  sleep(2)
   break
 end
   
   puts "player has chosen to hit"
+  sleep(2)
+  puts "Dealing you a new card"
+  sleep(2)
   player_cards << deck.pop
   player_total = calculate_total(player_cards)
-  puts "Player got the: #{player_cards}"
+  puts "Player has the: #{player_cards}"
   puts "you now have #{player_total}"
   
   if player_total == 21
+    sleep(1)
     puts "you have Blackjack, player wins!"
   end
   
@@ -90,12 +98,14 @@ end
 
 while dealer_total < 17
   puts "Dealer must hit if below 17"
+  sleep(1)
   dealer_cards << deck.pop
   dealer_total = calculate_total(dealer_cards)
   puts "Dealer has the: #{dealer_cards}"
   puts "dealers new total is #{dealer_total}"
   
   if dealer_total > 21
+    sleep(1)
     puts "dealer has busted player wins!"
     exit
   end
@@ -103,16 +113,21 @@ end
 
 if player_total > dealer_total
   puts "player has #{player_total} and dealer has #{dealer_total}"
+  sleep(1)
   puts "player wins!"
 end
 
 if player_total == dealer_total
+  sleep(1)
   puts "player has #{player_total} and dealer has #{dealer_total}"
+  sleep(1)
   puts "Its a tie!"
 end
 
 if dealer_total > player_total
+  sleep(1)
   puts "player has #{player_total} and dealer has #{dealer_total}"
+  sleep(1)
   puts "House wins!"
   exit
 end
