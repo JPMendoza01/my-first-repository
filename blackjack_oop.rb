@@ -42,10 +42,10 @@ class Deck
         @cards << Card.new(suit, face_value)
       end
     end
-    shuffle
+    deck_shuffle
   end
 
-  def shuffle
+  def deck_shuffle
     cards.shuffle!
   end
 
@@ -62,14 +62,14 @@ module Hand
 
   def show_hand
     puts " ----#{name}'s Hand----"
-    cards.each do|card|
+    cards.each do |card|
       puts "=> #{card}"
     end
     puts "=> Total: #{total}"
   end
 
   def total
-    face_values = cards.map{|card| card.face_value }
+    face_values = cards.map {|card| card.face_value }
 
     total = 0
     face_values.each do |val|
@@ -81,17 +81,20 @@ module Hand
   end
 
   #correct for Aces
-  face_values.select{|val| val == "A"}.count.times do
-    break if total <= 21
-    total -= 10
+    face_values.select {|val| val == "A"}.count.times do
+      break if total <= 21
+      total -= 10
+    end
+    total
   end
-  total
-end
+
+  def has_blackjack?
+    total == 21
+  end
 
   def add_card(new_card)
     cards << new_card
   end
-
 end
 
 class Player
@@ -130,23 +133,30 @@ class Dealer
   end
 end
 
-module Play_again
+module PlayAgain
   def next_game
-    sleep (2)
-    puts "do you want to play again, Y/N?"
-    play = gets.chomp.downcase
-    if play == "n"
-      exit
-    end
-    if play == 'y'
-      game = Game.new
-      game.dealing
+    while
+      sleep (1)
+      puts "do you want to play again, Y/N?"
+      play = gets.chomp.downcase
+
+      if !['y', 'n'].include?(play)
+        puts "you must enter Y or N"
+        next
+      end
+
+      if play == "n"
+        exit
+      end
+      if play == 'y'
+        game = Game.new.dealing
+      end
     end
   end
 end
 
 class Game
-  include Play_again
+  include PlayAgain
 
   attr_accessor :player, :dealer, :deck
 
@@ -174,9 +184,9 @@ class Game
   def dealing
     deal_cards
 
-    if player.total == BLACKJACK
+    if player.has_blackjack?
       sleep (1)
-      puts "player has hit black jack, player wins!"
+      puts "player has hit Blackjack!, player wins!"
       next_game
     end
 
@@ -201,7 +211,7 @@ class Game
       player.add_card(deck.deal_one)
       player.show_hand
 
-      if player.total == BLACKJACK
+      if player.has_blackjack?
         sleep (1)
         puts "#{player.name} has hit blackjack! #{player.name} WINS!"
         next_game
@@ -224,8 +234,9 @@ class Game
       dealer.show_hand
     end
 
-      if dealer.total == BLACKJACK
+      if dealer.has_blackjack?
         sleep (1)
+        dealer.show_hand
         puts "Dealer has Blackjack!"
         sleep (1)
         puts "Delaer wins!"
@@ -248,6 +259,7 @@ class Game
 
       if dealer.total > player.total && dealer.total < BLACKJACK
         sleep (1)
+        dealer.show_hand
         puts "Dealer has #{dealer.total}, Dealer has won!"
         next_game
       end
@@ -262,5 +274,4 @@ class Game
     end
 end
 
-game = Game.new
-game.dealing
+game = Game.new.dealing
