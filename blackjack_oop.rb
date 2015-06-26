@@ -1,7 +1,3 @@
-
-require 'rubygems'
-require 'pry'
-
 # 1. Have detailed requirements or specifications in writen form.
 # 2. Extract major nouns -> classes
 # 3. Extract major verbs -> instance methodes
@@ -32,7 +28,6 @@ class Card
     end
   end
 end
-
 
 class Deck
   attr_accessor :cards
@@ -99,15 +94,22 @@ end
 
 end
 
-
 class Player
   include Hand
 
   attr_accessor :name, :cards
 
-  def initialize(n)
-    @name = n
+  def initialize(name)
+    @name = name
     @cards = []
+  end
+
+  def get_player_name
+    puts "What is your name?"
+    @name = gets.chomp
+    puts "---Hello #{name} welcome to Blackjack---"
+    sleep(1)
+    puts "---get ready to play---"
   end
 end
 
@@ -119,6 +121,12 @@ class Dealer
   def initialize
     @name = "Dealer"
     @cards = []
+  end
+
+  def dealers_hand
+    puts " ----Dealer's Hand----"
+    puts "Dealers first card is hidden"
+    puts "Dealers second card is #{cards[1]}"
   end
 end
 
@@ -142,41 +150,43 @@ class Game
 
   attr_accessor :player, :dealer, :deck
 
+  BLACKJACK = 21
+  DEALERS_HIT_NUMBER = 17
+
   def initialize
     @deck = Deck.new
-    @player = Player.new("Joe")
+    @player = Player.new("player")
     @dealer = Dealer.new
   end
 
-
-  
-  def dealing
+  def deal_cards
+    player.get_player_name
+    sleep (1)
     player.add_card(deck.deal_one)
     player.add_card(deck.deal_one)
     player.show_hand
+    sleep (1)
     dealer.add_card(deck.deal_one)
     dealer.add_card(deck.deal_one)
-    dealer.show_hand
+    dealer.dealers_hand
+  end
 
-    
-    if player.total == 21
+  def dealing
+    deal_cards
+
+    if player.total == BLACKJACK
       sleep (1)
       puts "player has hit black jack, player wins!"
       next_game
     end
 
-    while player.total < 21
+    while player.total < BLACKJACK
       puts "Do you want to hit Y/N?"
       hit_or_stay = gets.chomp.downcase
 
        if !['y', 'n'].include?(hit_or_stay)
           puts "You must enter y or n "
           next
-      end
-
-      if hit_or_stay == 'n' && dealer.total > player.total && dealer.total > 17
-        puts "Dealer is going to win if you don't hit"
-        next
       end
 
       if hit_or_stay == 'n'
@@ -191,13 +201,13 @@ class Game
       player.add_card(deck.deal_one)
       player.show_hand
 
-      if player.total == 21
+      if player.total == BLACKJACK
         sleep (1)
         puts "#{player.name} has hit blackjack! #{player.name} WINS!"
         next_game
       end
 
-      if player.total > 21
+      if player.total > BLACKJACK
         sleep(1)
         puts "#{player.name} has busted!"
         puts "Dealer wins!"
@@ -205,7 +215,7 @@ class Game
       end
     end
 
-    while dealer.total < 17
+    while dealer.total < DEALERS_HIT_NUMBER
       sleep (1)
       puts "Dealer must hit if below 17"
       sleep (1)
@@ -214,7 +224,7 @@ class Game
       dealer.show_hand
     end
 
-      if dealer.total == 21
+      if dealer.total == BLACKJACK
         sleep (1)
         puts "Dealer has Blackjack!"
         sleep (1)
@@ -222,7 +232,7 @@ class Game
         next_game
       end
 
-      if dealer.total > 21
+      if dealer.total > BLACKJACK
         sleep (1)
         puts "Dealer has #{dealer.total} Dealer has busted!"
         sleep (1)
@@ -230,13 +240,13 @@ class Game
         next_game
       end
 
-      if player.total > dealer.total && dealer.total > 17
+      if player.total > dealer.total && dealer.total > DEALERS_HIT_NUMBER
         sleep (1)
         puts "#{player.name} has #{player.total} Dealer has #{dealer.total}, #{player.name} has won!"
         next_game
       end
 
-      if dealer.total > player.total && dealer.total < 21
+      if dealer.total > player.total && dealer.total < BLACKJACK
         sleep (1)
         puts "Dealer has #{dealer.total}, Dealer has won!"
         next_game
@@ -254,11 +264,3 @@ end
 
 game = Game.new
 game.dealing
-
-# deck = Deck.new
-
-
-
-
-
-
